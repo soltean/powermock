@@ -1,6 +1,5 @@
 package com.so;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,11 +25,10 @@ public class QuotesCentral {
         return quoteProvider.randomQuote();
     }
 
-    public void publishQuote(Quote quote) {
+    public void publishQuotes(List<Quote> quotes) {
         messageServer.connect();
-        messageServer.publish(Arrays.asList(quote));
+        messageServer.publish(quotes);
         messageServer.disconnect();
     }
-
 
 }
