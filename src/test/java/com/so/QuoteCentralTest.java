@@ -1,11 +1,14 @@
 package com.so;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
 
 import java.util.Arrays;
 import java.util.List;
@@ -26,17 +29,14 @@ public class QuoteCentralTest {
     @Mock
     private QuoteProvider quoteProvider;
 
+    @Rule
+    public MockitoRule mockito = MockitoJUnit.rule();
+
     @Before
     public void setup() {
-        MockitoAnnotations.initMocks(this);
-
         quotesCentral.setMessageServer(messageServer);
         quotesCentral.setQuoteProvider(quoteProvider);
-
         //stub method calls
-        Mockito.doNothing().when(messageServer).connect();
-        Mockito.doNothing().when(messageServer).disconnect();
-        Mockito.doNothing().when(messageServer).publish(any(List.class));
         Mockito.when(quoteProvider.generateQuotes()).thenReturn(quotes);
     }
 
@@ -54,7 +54,14 @@ public class QuoteCentralTest {
     public void testPublishQuotesByAuthor() {
         ArgumentCaptor<List<Quote>> quotesCaptor = ArgumentCaptor.forClass(List.class);
         String author = "Mark Twain";
+
+        //stub method calls
+        Mockito.doNothing().when(messageServer).connect();
+        Mockito.doNothing().when(messageServer).disconnect();
+        Mockito.doNothing().when(messageServer).publish(any(List.class));
+
         quotesCentral.publishQuotesByAuthor(author);
+
         //verify interactions
         Mockito.verify(messageServer).connect();
         Mockito.verify(messageServer).publish(quotesCaptor.capture());
