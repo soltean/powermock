@@ -32,10 +32,6 @@ public class QuotesCentral {
         return getQuotes().stream().filter(q -> q.getAuthor().equals(author)).collect(Collectors.toList());
     }
 
-    public Quote getQuoteOfTheDay() {
-        return getProvider().randomQuote();
-    }
-
     public void publishQuotes(List<Quote> quotes) {
         getMessageServer().connect();
         getMessageServer().publish(quotes);

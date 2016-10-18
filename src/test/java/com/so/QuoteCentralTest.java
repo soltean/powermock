@@ -2,7 +2,10 @@ package com.so;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.*;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
 import java.util.Arrays;
 import java.util.List;
@@ -12,13 +15,16 @@ import static org.mockito.ArgumentMatchers.any;
 
 public class QuoteCentralTest {
 
+    private final QuotesCentral quotesCentral = new QuotesCentral();
+    private final List<Quote> quotes = Arrays.asList(
+            new Quote("The lack of money is the root of all evil", "Mark Twain", 4),
+            new Quote("The secret of getting ahead is getting started.", "Mark Twain", 3),
+            new Quote("The difference between stupidity and genius is that genius has its limits.", "Albert Einstein", 5),
+            new Quote("It always seems impossible until it's done", "Nelson Mandela", 5));
     @Mock
     private MessageServer messageServer;
     @Mock
     private QuoteProvider quoteProvider;
-
-    private final QuotesCentral quotesCentral = new QuotesCentral();
-    private final List<Quote> quotes = Arrays.asList(new Quote("To eat or to sleep", "Mark Twain", 4));
 
     @Before
     public void setup() {
@@ -38,7 +44,8 @@ public class QuoteCentralTest {
     public void testFindByAuthor() {
         String author = "Mark Twain";
         List<Quote> result = quotesCentral.findByAuthor(author);
-        assertThat(result).as("The author should be " + author).extracting("author").isEqualTo(author);
+        assertThat(result).as("There should be 2 quotes").hasSize(2);
+        assertThat(result).as("The author should be " + author).extracting("author").allMatch(s -> s.equals(author));
         //verify interactions
         Mockito.verify(quoteProvider).generateQuotes();
     }
@@ -46,16 +53,13 @@ public class QuoteCentralTest {
     @Test
     public void testPublishQuotesByAuthor() {
         ArgumentCaptor<List<Quote>> quotesCaptor = ArgumentCaptor.forClass(List.class);
-        ArgumentCaptor<String> nameCaptor = ArgumentCaptor.forClass(String.class);
-
         String author = "Mark Twain";
         quotesCentral.publishQuotesByAuthor(author);
         //verify interactions
         Mockito.verify(messageServer).connect();
-        Mockito.verify(quotesCentral).findByAuthor(nameCaptor.capture());
-        assertThat(nameCaptor.getValue()).as("The author should be " + author).isEqualTo(author);
         Mockito.verify(messageServer).publish(quotesCaptor.capture());
-        assertThat(quotesCaptor.getValue()).as("The author should be " + author).extracting("author").isEqualTo(author);
+        assertThat(quotesCaptor.getValue()).as("There should be 2 quotes").hasSize(2);
+        assertThat(quotesCaptor.getValue()).as("The author should be " + author).extracting("author").allMatch(s -> s.equals(author));
         Mockito.verify(messageServer).disconnect();
     }
 }
