@@ -6,6 +6,15 @@ public class Quote {
     private String author;
     private int rating;
 
+    public Quote(String text, String author, int rating) {
+        this.text = text;
+        this.author = author;
+        this.rating = rating;
+    }
+
+    public Quote() {
+    }
+
     public String getText() {
         return text;
     }

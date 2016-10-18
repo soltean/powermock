@@ -2,7 +2,8 @@ package com.so;
 
 import java.util.List;
 
-public class MessageServer {
+public enum MessageServer {
+    INSTANCE;
 
     public void connect() {
         System.out.println("Connected to server");
