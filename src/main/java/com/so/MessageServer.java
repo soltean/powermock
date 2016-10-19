@@ -1,6 +1,7 @@
 package com.so;
 
 import java.util.List;
+import java.util.Optional;
 
 public class MessageServer {
 
@@ -12,8 +13,9 @@ public class MessageServer {
         System.out.println("Disconnected from server");
     }
 
-    public void publish(List<Quote> quotes) {
+    public boolean publish(List<Quote> quotes) {
         System.out.println("Publishing quotes " + quotes);
+        return Optional.ofNullable(quotes).isPresent();
     }
 
 }

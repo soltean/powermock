@@ -32,14 +32,17 @@ public class QuotesCentral {
         return getQuotes().stream().filter(q -> q.getAuthor().equals(author)).collect(Collectors.toList());
     }
 
-    public void publishQuotes(List<Quote> quotes) {
-        getMessageServer().connect();
-        getMessageServer().publish(quotes);
-        getMessageServer().disconnect();
+    public boolean publishQuotes(List<Quote> quotes) {
+        try {
+            getMessageServer().connect();
+            return getMessageServer().publish(quotes);
+        } finally {
+            getMessageServer().disconnect();
+        }
     }
 
-    public void publishQuotesByAuthor(String name) {
-        publishQuotes(findByAuthor(name));
+    public boolean publishQuotesByAuthor(String name) {
+        return publishQuotes(findByAuthor(name));
     }
 
 }
