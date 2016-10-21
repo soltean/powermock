@@ -68,7 +68,8 @@ public class QuoteCentralTestWithoutMocks {
     @Test
     public void testPublishQuotesByAuthor() {
         String author = "Mark Twain";
-        quotesCentral.publishQuotesByAuthor(author);
+        boolean result = quotesCentral.publishQuotesByAuthor(author);
+        assertThat(result).as("Quotes should be published").isTrue();
         assertThat(messageServer.getNumberOfCalls()).as("Should be 3 calls").isEqualTo(3);
     }
 }
