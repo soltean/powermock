@@ -38,7 +38,7 @@ public class QuoteCentralTest {
     public void testFindByAuthor() {
         String author = "Mark Twain";
         List<Quote> result = quotesCentral.findByAuthor(author);
-        assertThat(result).as("There should be 2 QUOTES").hasSize(2);
+        assertThat(result).as("There should be 2 quotes").hasSize(2);
         assertThat(result).as("The author should be " + author).extracting("author").allMatch(s -> s.equals(author));
         //verify interactions
         Mockito.verify(quoteProvider).generateQuotes();
@@ -59,7 +59,7 @@ public class QuoteCentralTest {
         //verify interactions
         Mockito.verify(messageServer).connect();
         Mockito.verify(messageServer).publish(quotesCaptor.capture());
-        assertThat(quotesCaptor.getValue()).as("There should be 2 QUOTES").hasSize(2);
+        assertThat(quotesCaptor.getValue()).as("There should be 2 quotes").hasSize(2);
         assertThat(quotesCaptor.getValue()).as("The author should be " + author).extracting("author").allMatch(s -> s.equals(author));
         Mockito.verify(messageServer).disconnect();
     }

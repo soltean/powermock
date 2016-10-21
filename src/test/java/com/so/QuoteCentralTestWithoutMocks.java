@@ -7,10 +7,11 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class QuoteCentralTestWithSpies {
+public class QuoteCentralTestWithoutMocks {
 
     private final QuotesCentral quotesCentral = new QuotesCentral();
 
+    //This is a spy and also a stub
     private class SpyMessageServer extends MessageServer {
         int methodCalls = 0;
 
@@ -38,7 +39,8 @@ public class QuoteCentralTestWithSpies {
         }
     }
 
-    private class SpyQuoteProvider extends QuoteProvider {
+    //This is a Fake
+    private class FakeQuoteProvider extends QuoteProvider {
 
         @Override
         public List<Quote> generateQuotes() {
@@ -47,7 +49,7 @@ public class QuoteCentralTestWithSpies {
     }
 
     private SpyMessageServer messageServer = new SpyMessageServer();
-    private SpyQuoteProvider quoteProvider = new SpyQuoteProvider();
+    private FakeQuoteProvider quoteProvider = new FakeQuoteProvider();
 
     @Before
     public void setup() {
@@ -59,7 +61,7 @@ public class QuoteCentralTestWithSpies {
     public void testFindByAuthor() {
         String author = "Mark Twain";
         List<Quote> result = quotesCentral.findByAuthor(author);
-        assertThat(result).as("There should be 2 QUOTES").hasSize(2);
+        assertThat(result).as("There should be 2 quotes").hasSize(2);
         assertThat(result).as("The author should be " + author).extracting("author").allMatch(s -> s.equals(author));
     }
 
