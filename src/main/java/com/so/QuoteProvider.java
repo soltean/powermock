@@ -11,6 +11,15 @@ public class QuoteProvider {
 
     private static final String FILE_NAME = "quotes.txt";
 
+    private static final QuoteProvider INSTANCE = new QuoteProvider();
+
+    private QuoteProvider() {
+    }
+
+    public static QuoteProvider getInstance() {
+        return INSTANCE;
+    }
+
     public List<Quote> generateQuotes() {
         try {
             return Files.lines(Paths.get(ClassLoader.getSystemResource(FILE_NAME).toURI()))
