@@ -9,14 +9,15 @@ import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.rule.PowerMockRule;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Matchers.any;
 
-
+@PrepareForTest(QuoteProvider.class)
 public class QuoteCentralTest {
 
     private final QuotesCentral quotesCentral = new QuotesCentral();
@@ -59,7 +60,7 @@ public class QuoteCentralTest {
 
     @Test
     public void testPublishQuotesByAuthor() {
-        ArgumentCaptor<List<Quote>> quotesCaptor = ArgumentCaptor.forClass(List.class);
+        ArgumentCaptor<List> quotesCaptor = ArgumentCaptor.forClass(List.class);
         String author = "Mark Twain";
 
         //stub method calls
